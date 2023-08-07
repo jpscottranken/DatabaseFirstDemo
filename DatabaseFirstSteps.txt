@@ -1,0 +1,171 @@
+//	Gleaned from the following YouTube Video:
+//	Entity Framework 6 Tutorial: Learn Entity Framework 6 from Scratch
+//	https://www.youtube.com/watch?v=ZX7_12fwQLU
+
+0.	Create DatabaseFirst database using SQL Server Object Explorer.
+
+1.	Open the SQL Server Object Explorer via the command:
+	View / SQL Server Object Explorer
+
+2.	Open the the Server named: (localdb)\MSSQLLocalDB
+
+3.	Right mouse-click on the Databases folder and
+	choose the Add New Database option. For the name,
+	choose DatabaseFirst.
+
+4.	Verify that this worked. Shown in class.
+
+5.	Right mouse-click on the new database and
+	choose table/new table.
+
+6.	In here, enter the following:
+
+CREATE TABLE Employee (
+	EmployeeID  INT IDENTITY(1,1) PRIMARY KEY,
+	FirstName 	VARCHAR(50) NOT NULL,
+	LastName 	VARCHAR(50) NOT NULL,
+	Address		VARCHAR(50) NOT NULL,
+	City		VARCHAR(50) NOT NULL,
+	StateCode	CHAR(2)		NOT NULL,
+	Zip			VARCHAR(15) NOT NULL,
+	Phone		VARCHAR(15) NOT NULL,
+	DeptCode	INT			NOT NULL,
+	Salary		DECIMAL(11,2) NOT NULL
+);
+
+7.	Open Visual Studio. Create a new Console project
+	called DatabaseFirstDemo.
+
+8.	Tools / NuGet Package Manager / Manage NuGet Packages for Solution...
+	
+	Click the Browse option. In the Search box, enter Entity Framework.
+	
+	Choose the EntityFramework one (on top for me) by single-clicking on it.
+	
+	Click in the Project checkbox (Will choose DBFirstDemo also).
+
+	Click the Install button. Click OK. Click I Accept.
+	
+	Close NuGet. Then reopen it via the following:
+	Tools / NuGet Package Manager / Manage NuGet Packages for Solution...
+	go to Installed. Verify that EntityFramework has been loaded.
+	Close NuGet.
+
+	NOTE: The above can also be done via the following:
+	
+	Tools / NuGet Package Manager / Package Manager Console.
+	From the command line, enter the following command:
+	install-package Entity Framework
+
+9.	In Visual Studio, right mouse-click on the Project
+	Name. Choose Add. Choose New Item. Choose ADO.NET Entity Data Model
+	Rename it EmployeeModel and click the Add button
+
+	
+	This opens up the Entity Data Model Wizard:
+	From the Choose Model Contents, choose EF Designer from database and click the Next Button.
+	
+	From the Choose Your Connection, click the New Connection button. 
+	
+	From the Connection Properties, choose Microsoft SQL Server.
+	For Server Name, enter (localdb)\MSSQLLocalDB
+	For Log on to the server, choose Use Windows Authentication.
+	For Connect to a database, click down arrow, choose DatabaseFirst
+	If desired, click the Test Connection button.
+	Click the OK button.
+	
+	Back at the Choose Your Data Connect, verify that:
+	Connection is set.
+	Connection string is set.
+	Save connection settings in App.Config as EmployeeEntities checked/set.
+	Click the Next button.
+	
+	From the Choose Your Database Object and Settings /
+	Which database objects do you want to include in your model?
+	Choose the Tables / dbo / Employee checkbox.
+	Click Finish.
+	
+	This brings up the EmployeeModel.edmx data model.
+	This represents the conceptual model that displays the
+	mapping between the database tables and the domain classes.
+
+	In the Solution Explorer, open the EmployeeModel.edmx
+	This is all designer created code.
+
+	Open the EmployeeModel.edmx / EmployeeModelContext.cs file.
+	Arrow down this file, find the following:
+	public virtual DbSet<Employee> Employees { get; set; }
+	which represents the table.
+	
+	Open the EmployeeModel.tt folder and find the file:
+	Employee.cs  This is the class file created.
+	
+10.	Go to the Program.cs file, and enter the following:
+
+	//	Under the following: 
+	static void Main(string[] args)
+	{
+		//	Enter the line below now.
+		var context = new EmployeeEntities();
+		var Employee1 = new Employee()
+		{
+			EmployeeID  = 1,
+			FirstName 	= "Jeff",
+			LastName 	= "Scott",
+			Address		= "751 Parr Rd.",
+			City		= "Wentzville",
+			StateCode	= "MO",
+			Zip			= "63385",
+			Phone		= "(214) 386-3675",
+			DeptCode	=	1,
+			Salary		=	67890
+		};
+				
+		var Employee2 = new Employee()
+		{
+			EmployeeID = 2,
+			FirstName 	= "Evan",
+			LastName 	= "Gudmestad",
+			Address		= "4431 Finney Ave.",
+			City		= "St Louis",
+			StateCode	= "MO",
+			Zip			= "63113",
+			Phone		= "(214) 386-3991",
+			DeptCode	=	2,
+			Salary		=	78901
+		};
+		
+		var Employee3 = new Employee()
+		{
+			EmployeeID  = 3,
+			FirstName 	= "Charles",
+			LastName 	= "Corrigan",
+			Address		= "4431 Finney Ave.",
+			City		= "St Louis",
+			StateCode	= "MO",
+			Zip			= "63113",
+			Phone		= "(214) 386-4848",
+			DeptCode	=	3,
+			Salary		=	89012
+		};
+		
+		context.Employees.Add(Employee1);
+		context.Employees.Add(Employee2);
+		context.Employees.Add(Employee3);
+		context.SaveChanges();	
+	}
+	
+11.	Save and run the program.
+
+NOTE: No stored procedures. No SQLConnect(), etc.
+
+12.	Go to Tables / dbo.Employee and choose to see Table Design.
+	Go to Tables / dbo.Employee and choose to see Table 1st 1000 rows.
+
+
+13.	You Want More?!? Go to this Article:
+
+Tutorial: Getting Started with Entity Framework 6 Database First Using MVC 5
+
+with this URL: https://learn.microsoft.com/en-us/aspnet/mvc/overview/getting-started/database-first-development/
+
